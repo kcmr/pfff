@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/google-feeds/google-feeds.html">
+<link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
+
+<link rel="import" href="../app-behaviors/app-behaviors.html">
+
+<dom-module id="feed-view">
+  <style include="app-grid-style">
+    :host {
+      display: block;
+      height: calc(100vh - 64px);
+
+      --app-grid-columns: 3;
+      --app-grid-gutter: 30px;
+      --app-grid-expandible-item-columns: 3;
+    }
+
+    @media (max-width: 900px) {
+      :host {
+        --app-grid-columns: 2;
+      }
+    }
+
+    @media (max-width: 600px) {
+      :host {
+        --app-grid-columns: 1;
+      }
+    }
+
+    .app-grid__item:first-child {
+      @apply(--app-grid-expandible-item);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+  </style>
+
+  <template>
+    <google-feeds feed="[[feed]]"
+      query="Smashing magazine"
+      on-google-feeds-queryresponse="_onQueryResponse"
+      results="{{result}}">
+    </google-feeds>
+
+    <div class="app-grid">
+      <template is="dom-repeat" items="[[result.entries]]">
+        <div class="app-grid__item">
+          <h2><a href$="/article/[[slug(item.title)]]" on-click="_setSelected">[[item.title]]</a></h2>
+          [[item.contentSnippet]]
+        </div>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+  Polymer({
+    is: 'feed-view',
+
+    behaviors: [
+      FeedsAppBehaviors.SlugBehavior
+    ],
+
+    properties: {
+      feed: String
+    },
+
+    _setSelected: function(e) {
+      this.fire('selected-item', e.model.item, { bubbles: false });
+    },
+
+    _onQueryResponse: function(e) {
+      if (e.detail.entries.length) {
+        console.log(e.detail.entries[0].title);
+        console.log(e.detail.entries[0].url);
+        console.log(e.detail.entries[0]);
+      }
+
+    }
+  });
+  </script>
+</dom-module>
