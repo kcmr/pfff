@@ -10,8 +10,6 @@
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
-<link rel="import" href="../feeds-category/feeds-category.html">
-
 <link rel="import" href="../feed-view/feed-view.html">
 <link rel="import" href="../article-view/article-view.html">
 
@@ -25,10 +23,16 @@
       :host {
         display: block;
 
+        --app-drawer-width: 304px;
         --app-drawer-content-container: {
-          background-color: var(--secondary-color);
+          background-color: var(--drawer-background-color);
           color: #000;
         };
+      }
+
+      app-toolbar {
+        padding: 0 10px;
+        height: 56px;
       }
 
       app-header {
@@ -37,23 +41,43 @@
         box-shadow: 0 2px 3px 0 rgba(0,0,0,0.28);
       }
 
+      app-header paper-icon-button {
+        margin-right: 20px;
+      }
+
       app-header [main-title] {
         font-size: 20px;
         font-weight: 500;
       }
 
-      app-drawer {}
-
       .drawer-list {
         list-style: none;
-        margin: 0;
+        margin: 10px 0;
         padding: 0;
       }
-      .drawer-list__item {}
+      .drawer-list__item {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.71;
+      }
       .drawer-list__link {
         display: block;
-        padding: 10px;
+        padding: 12px 20px;
         text-decoration: none;
+        color: #000;
+      }
+
+      /* TODO: marcar item activo en menu */
+      .drawer-link__icon {
+        margin-right: 16px;
+        opacity: .54;
+      }
+
+      @media (max-width: 63.94em) {
+        /* TODO: reemplazar por attributo que indique que siempre esta abierto (desktop) */
+        .drawer-header {
+          box-shadow: none;
+        }
       }
     </style>
 
@@ -75,11 +99,22 @@
         </app-header>
       </app-header-layout>
 
-      <app-drawer opened persistent swipe-open>
+      <app-drawer opened persistent swipe-open no-focus-trap>
+        <app-header class="drawer-header">
+          <app-toolbar>
+            <p>Selector de sources</p>
+          </app-toolbar>
+        </app-header>
+
         <iron-selector selected="{{pageData.siteName}}" attr-for-selected="data-feed">
           <ul class="drawer-list">
             <template is="dom-repeat" items="[[sources]]">
-              <li class="drawer-list__item"><a class="drawer-list__link" data-feed$="[[slug(item.siteName)]]" href$="/feed/[[slug(item.siteName)]]">[[item.siteName]]</a></li>
+              <li class="drawer-list__item">
+                <a class="drawer-list__link drawer-link" data-feed$="[[slug(item.siteName)]]" href$="/feed/[[slug(item.siteName)]]">
+                  <iron-icon icon="description" class="drawer-link__icon"></iron-icon>
+                  <span class="drawer-link__label">[[item.siteName]]</span>
+                </a>
+              </li>
             </template>
           </ul>
         </iron-selector>
