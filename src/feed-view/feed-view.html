@@ -38,9 +38,8 @@
   </style>
 
   <template>
-    <google-feeds feed="[[feed]]"
-      query="Smashing magazine"
-      on-google-feeds-queryresponse="_onQueryResponse"
+    <google-feeds
+      feed="[[feed]]"
       results="{{result}}">
     </google-feeds>
 
@@ -69,15 +68,6 @@
 
     _setSelected: function(e) {
       this.fire('selected-item', e.model.item, { bubbles: false });
-    },
-
-    _onQueryResponse: function(e) {
-      if (e.detail.entries.length) {
-        console.log(e.detail.entries[0].title);
-        console.log(e.detail.entries[0].url);
-        console.log(e.detail.entries[0]);
-      }
-
     }
   });
   </script>
