@@ -23,6 +23,7 @@
       :host {
         display: block;
 
+        /*--app-drawer-width: 84%;*/
         --app-drawer-width: 304px;
         --app-drawer-content-container: {
           background-color: var(--drawer-background-color);
@@ -50,6 +51,15 @@
         font-weight: 500;
       }
 
+      /* app-header inside drawer in narrow mode (not desktop) */
+      app-drawer:not([persistent]) .drawer-header {
+        box-shadow: none;
+      }
+
+      .drawer-header app-toolbar {
+        padding: 0 20px;
+      }
+
       .drawer-list {
         list-style: none;
         margin: 10px 0;
@@ -73,10 +83,9 @@
         opacity: .54;
       }
 
-      @media (max-width: 63.94em) {
-        /* TODO: reemplazar por attributo que indique que siempre esta abierto (desktop) */
-        .drawer-header {
-          box-shadow: none;
+      @media (min-width: 48em) {
+        app-toolbar {
+          padding: 0 20px;
         }
       }
     </style>
@@ -89,9 +98,9 @@
       tail="{{tail}}">
     </app-route>
 
-    <app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed responsive-width="959px" on-narrow-changed="_setupLayout">
       <app-header-layout>
-        <app-header reveals>
+        <app-header reveals fixed="[[fixedHeader]]">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <h1 main-title>Polyfeed</h1>
@@ -99,8 +108,8 @@
         </app-header>
       </app-header-layout>
 
-      <app-drawer opened persistent swipe-open no-focus-trap>
-        <app-header class="drawer-header">
+      <app-drawer swipe-open no-focus-trap>
+        <app-header class="drawer-header" fixed>
           <app-toolbar>
             <p>Selector de sources</p>
           </app-toolbar>
@@ -141,6 +150,7 @@
       ],
 
       properties: {
+        fixedHeader: Boolean,
         sources: {
           type: Array,
           value: function() {
@@ -152,6 +162,10 @@
             ]
           }
         }
+      },
+
+      _setupLayout: function(e) {
+        this.fixedHeader = !e.detail.value;
       },
 
       _getFeed: function(tail) {
