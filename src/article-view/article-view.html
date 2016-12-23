@@ -6,28 +6,60 @@
       display: block;
       font-size: 16px;
       line-height: 1.5;
+      margin-bottom: 60px;
     }
 
-    .responsive-img {
-      width: 100% !important;
-      height: auto !important;
-      max-width: 100%;
-    }
-
-    article {
-      max-width: 60%;
+    .article {
       margin: auto;
+      padding: 0 20px;
     }
 
+    .article__title {
+      font-size: 2em;
+      font-weight: 300;
+      line-height: 1.375;
+      color: var(--primary-color);
+    }
+
+    .article__content h1,
+    .article__content h2,
+    .article__content h3,
+    .article__content h4,
+    .article__content h5,
+    .article__content h6 {
+      color: var(--primary-color);
+      font-weight: 400;
+      margin-bottom: 0.5em;
+    }
+
+    a { color: var(--primary-color); }
+    a:focus {
+      background-color: var(--primary-color);
+      color: #fff;
+      outline: none;
+    }
+    a:hover,
+    a:active {
+      color: var(--primary-color-darker);
+      background-color: transparent;
+    }
+
+    @media (min-width: 48em) {
+      .article {
+        width: 70%;
+        max-width: 680px;
+        padding: 0;
+      }
+    }
   </style>
 
   <template>
-    <article>
+    <article class="article">
       <header>
-        <h1>[[article.title]]</h1>
+        <h1 class="article__title">[[article.title]]</h1>
       </header>
-      <div class="date">[[article.publishedDate]]</div>
-      <div class="content" id="content">[[_formatContent(article.content)]]</div>
+      <div class="article__date">[[article.publishedDate]]</div>
+      <div class="article__content" id="content">[[_formatContent(article.content)]]</div>
     </article>
   </template>
 
