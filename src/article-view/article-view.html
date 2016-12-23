@@ -33,6 +33,21 @@
       line-height: 1.2;
     }
 
+    .article__content img {
+      max-width: 100%;
+      height: auto !important;
+      margin: auto;
+      display: block;
+    }
+
+    .article__content object,
+    .article__content video,
+    .article__content iframe {
+      max-width: 100%;
+      width: 100% !important;
+      height: calc(100vw * (9/16));
+    }
+
     a { color: var(--primary-color); }
     a:focus {
       background-color: var(--primary-color);
@@ -82,13 +97,6 @@
         margin-right: -20px;
         max-width: calc(100% + 40px) !important;
       }
-      .article object,
-      .article video,
-      .article iframe {
-        max-width: 100%;
-        width: 100%;
-        height: auto;
-      }
     }
   </style>
 
@@ -98,28 +106,28 @@
         <h1 class="article__title">[[article.title]]</h1>
       </header>
       <div class="article__date">[[article.publishedDate]]</div>
-      <div class="article__content" id="content">[[_formatContent(article.content)]]</div>
+      <div class="article__content" inner-h-t-m-l="[[article.content]]"></div>
     </article>
   </template>
 
   <script>
   Polymer({
     is: 'article-view',
+
     properties: {
-      article: Object
+      article: Object,
+      active: {
+        type: Boolean,
+        observer: '_activeChanged'
+      }
     },
 
-    _formatContent: function(content) {
-      var div = document.createElement('div');
-      div.innerHTML = content;
-      this.$.content.innerHTML = '';
-      this.$.content.appendChild(div);
-      this.$.content.querySelectorAll('img');
-      [].forEach.call(this.$.content.querySelectorAll('img'), function(img) {
-        img.removeAttribute('width');
-        img.removeAttribute('height');
-        img.style.cssText = 'max-width: 100%;';
-      });
+    _activeChanged: function(active) {
+      // request the article if the page is loaded directly
+      // otherwise article data comes from feed view
+      if (active && !this.article) {
+        this.fire('article-request');
+      }
     }
   });
   </script>

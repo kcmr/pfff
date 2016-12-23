@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/google-feeds/google-feeds.html">
+
+<dom-module id="app-data">
+  <template>
+    <google-feeds
+      feed="[[_feed]]"
+      results="{{_data}}"
+      on-google-feeds-response="_fireEvent">
+    </google-feeds>
+  </template>
+
+  <script>
+  Polymer({
+    is: "app-data",
+    properties: {
+      feed: {
+        type: String,
+        observer: '_feedChanged'
+      },
+      _data: {
+        type: Object,
+        observer: '_dataChanged'
+      },
+      _feed: String,
+      _cache: {
+        type: Object,
+        value: function() {
+          return {};
+        }
+      }
+    },
+
+    _feedChanged: function(feed) {
+      if (feed in this._cache) {
+        // get data from cache and prevent a network request
+        this.fire('response', this._cache[feed], { bubbles: false });
+      } else {
+        this._feed = feed;
+      }
+    },
+
+    _dataChanged: function(data) {
+      if (data) {
+        this._cache[this._feed] = data;
+      }
+    },
+
+    _fireEvent: function() {
+      this.fire('response', this._data, { bubbles: false });
+    }
+  });
+  </script>
+</dom-module>

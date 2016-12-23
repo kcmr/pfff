@@ -13,6 +13,7 @@
 <link rel="import" href="../feed-view/feed-view.html">
 <link rel="import" href="../article-view/article-view.html">
 
+<link rel="import" href="../app-data/app-data.html">
 <link rel="import" href="../app-icons/app-icons.html">
 <link rel="import" href="../app-behaviors/app-behaviors.html">
 <link rel="import" href="../app-styles/app-theme.html">
@@ -102,9 +103,14 @@
       tail="{{tail}}">
     </app-route>
 
+    <app-data
+      feed="[[_getFeedUrl(tail)]]"
+      on-response="_setFeeds">
+    </app-data>
+
     <app-drawer-layout fullbleed responsive-width="959px" on-narrow-changed="_setupLayout">
       <app-header-layout>
-        <app-header reveals fixed="[[fixedHeader]]">
+        <app-header reveals fixed="[[_fixedHeader]]">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <h1 main-title>Polyfeed</h1>
@@ -134,9 +140,10 @@
       <iron-pages
         selected="[[pageData.page]]"
         attr-for-selected="data-page"
-        fallback-selection="feed">
-        <feed-view data-page="feed" feed="[[_getFeed(tail)]]" on-selected-item="_setArticle"></feed-view>
-        <article-view data-page="article" article="[[article]]"></article-view>
+        fallback-selection="feed"
+        selected-attribute="active">
+        <feed-view data-page="feed" feeds="[[_feeds]]" on-selected-item="_setArticle"></feed-view>
+        <article-view data-page="article" article="[[_article]]" on-article-request="_getArticle"></article-view>
       </iron-pages>
     </app-drawer-layout>
 
@@ -152,7 +159,6 @@
       ],
 
       properties: {
-        fixedHeader: Boolean,
         sources: {
           type: Array,
           value: function() {
@@ -163,7 +169,10 @@
               { siteName: 'Tecnología El Corte Inglés', feed: 'http://www.tecnologiadetuatu.elcorteingles.es/feed/' }
             ]
           }
-        }
+        },
+        _fixedHeader: Boolean,
+        _feeds: Array,
+        _article: Object
       },
 
       _computeActiveLink: function(item, tail) {
@@ -171,10 +180,10 @@
       },
 
       _setupLayout: function(e) {
-        this.fixedHeader = !e.detail.value;
+        this._fixedHeader = !e.detail.value;
       },
 
-      _getFeed: function(tail) {
+      _getFeedUrl: function(tail) {
         var path = tail.path.substr(1);
         var feed;
         this.sources.forEach(function(item) {
@@ -186,8 +195,19 @@
       },
 
       _setArticle: function(e) {
-        this.article = e.detail;
+        this.set('_article', e.detail);
+      },
+
+      _getArticle: function() {
+        console.log('necesito artículo!');
+      },
+
+      _setFeeds: function(e) {
+        if (e.detail.entries && e.detail.entries.length) {
+          this.set('_feeds', e.detail.entries);
+        }
       }
+
     });
   </script>
 </dom-module>
