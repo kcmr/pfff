@@ -28,6 +28,19 @@
         --app-grid-gutter: 20px;
       }
     }
+
+    @media (min-width: 64em) {
+      :host {
+        max-width: 80%;
+        margin: auto;
+      }
+    }
+
+    @media (min-width: 100em) {
+      :host {
+        --app-grid-columns: 3;
+      }
+    }
   </style>
 
   <template>
