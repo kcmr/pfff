@@ -15,8 +15,8 @@
     }
 
     .article__title {
-      font-size: 2em;
-      font-weight: 300;
+      font-size: 26px;
+      font-weight: 400;
       line-height: 1.375;
       color: var(--primary-color);
     }
@@ -29,7 +29,8 @@
     .article__content h6 {
       color: var(--primary-color);
       font-weight: 400;
-      margin-bottom: 0.5em;
+      margin-bottom: -0.2em;
+      line-height: 1.2;
     }
 
     a { color: var(--primary-color); }
@@ -45,10 +46,48 @@
     }
 
     @media (min-width: 48em) {
+      .article__title {
+        font-size: 2em;
+        font-weight: 300;
+        line-height: 1.375;
+      }
+    }
+
+    @media (min-width: 48em) {
       .article {
         width: 70%;
         max-width: 680px;
         padding: 0;
+      }
+    }
+
+    @media (max-width: 47.9375em) {
+      :host {
+        background-color: var(--grey-medium);
+        padding: 20px 0 60px;
+        margin-bottom: 0;
+        min-height: calc(100vh - 136px);
+        height: 100%;
+      }
+      .article__title {
+        margin-top: 0;
+      }
+      .article {
+        @apply(--card);
+        background-color: #fff;
+        margin: 0 20px;
+      }
+      .article img {
+        margin-left: -20px;
+        margin-right: -20px;
+        max-width: calc(100% + 40px) !important;
+      }
+      .article object,
+      .article video,
+      .article iframe {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
       }
     }
   </style>
