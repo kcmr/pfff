@@ -76,11 +76,15 @@
         text-decoration: none;
         color: #000;
       }
-
-      /* TODO: marcar item activo en menu */
+      .drawer-list__link--active {
+        color: var(--primary-color);
+      }
       .drawer-link__icon {
         margin-right: 16px;
         opacity: .54;
+      }
+      .drawer-list__link--active .drawer-link__icon {
+        opacity: 1;
       }
 
       @media (min-width: 48em) {
@@ -115,18 +119,16 @@
           </app-toolbar>
         </app-header>
 
-        <iron-selector selected="{{pageData.siteName}}" attr-for-selected="data-feed">
-          <ul class="drawer-list">
-            <template is="dom-repeat" items="[[sources]]">
-              <li class="drawer-list__item">
-                <a class="drawer-list__link drawer-link" data-feed$="[[slug(item.siteName)]]" href$="/feed/[[slug(item.siteName)]]">
-                  <iron-icon icon="description" class="drawer-link__icon"></iron-icon>
-                  <span class="drawer-link__label">[[item.siteName]]</span>
-                </a>
-              </li>
-            </template>
-          </ul>
-        </iron-selector>
+        <ul class="drawer-list">
+          <template is="dom-repeat" items="[[sources]]">
+            <li class="drawer-list__item">
+              <a class$="drawer-list__link drawer-link [[_computeActiveLink(item, tail)]]" data-feed$="[[slug(item.siteName)]]" href$="/feed/[[slug(item.siteName)]]">
+                <iron-icon icon="description" class="drawer-link__icon"></iron-icon>
+                <span class="drawer-link__label">[[item.siteName]]</span>
+              </a>
+            </li>
+          </template>
+        </ul>
       </app-drawer>
 
       <iron-pages
@@ -162,6 +164,10 @@
             ]
           }
         }
+      },
+
+      _computeActiveLink: function(item, tail) {
+        return tail.path.substr(1) === this.slug(item.siteName) ? 'drawer-list__link--active' : '';
       },
 
       _setupLayout: function(e) {
