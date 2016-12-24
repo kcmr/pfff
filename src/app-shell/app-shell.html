@@ -10,15 +10,15 @@
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
-<link rel="import" href="../feed-view/feed-view.html">
-<link rel="import" href="../article-view/article-view.html">
-
 <link rel="import" href="../app-data/app-data.html">
 <link rel="import" href="../app-icons/app-icons.html">
 <link rel="import" href="../app-behaviors/app-behaviors.html">
 <link rel="import" href="../app-styles/app-theme.html">
 
-<dom-module id="feeds-app">
+<link rel="import" href="../app-views/feed-view.html">
+<link rel="import" href="../app-views/article-view.html">
+
+<dom-module id="app-shell">
   <template>
     <style>
       :host {
@@ -152,7 +152,7 @@
   <script>
     Polymer({
 
-      is: 'feeds-app',
+      is: 'app-shell',
 
       behaviors: [
         FeedsAppBehaviors.SlugBehavior
