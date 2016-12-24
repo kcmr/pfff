@@ -15,6 +15,14 @@
       --app-grid-gutter: 20px;
     }
 
+    .excerpt-content img {
+      max-width: calc(100% + 40px);
+      height: auto;
+      margin-left: -20px;
+      margin-right: -20px;
+      object-fit: fill;
+    }
+
     @media (min-width: 48em) {
       :host {
         --app-grid-columns: 2;
@@ -64,10 +72,7 @@
 
     properties: {
       feeds: Array,
-      active: {
-        type: Boolean,
-        value: false
-      }
+      active: Boolean
     },
 
     _setSelected: function(e) {
