@@ -6,7 +6,7 @@
     <google-feeds
       feed="[[_feed]]"
       results="{{_data}}"
-      on-google-feeds-response="_fireEvent">
+      on-google-feeds-response="_onFeedResponse">
     </google-feeds>
   </template>
 
@@ -46,7 +46,7 @@
       }
     },
 
-    _fireEvent: function() {
+    _onFeedResponse: function() {
       this.fire('response', this._data, { bubbles: false });
     }
   });
