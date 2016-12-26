@@ -9,6 +9,7 @@
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="../app-data/app-data.html">
 <link rel="import" href="../app-icons/app-icons.html">
@@ -114,6 +115,7 @@
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <h1 main-title>Polyfeed</h1>
+            <paper-input label="Buscar" value="{{_feedFilter}}"></paper-input>
           </app-toolbar>
         </app-header>
       </app-header-layout>
@@ -142,7 +144,7 @@
         attr-for-selected="data-page"
         fallback-selection="feed"
         selected-attribute="active">
-        <feed-view data-page="feed" feeds="[[_feeds]]" on-selected-item="_setArticle"></feed-view>
+        <feed-view data-page="feed" feeds="[[_feeds]]" on-selected-item="_setArticle" filter="[[_feedFilter]]"></feed-view>
         <article-view data-page="article" article="[[_article]]" on-article-request="_getArticle"></article-view>
       </iron-pages>
     </app-drawer-layout>
@@ -171,6 +173,7 @@
             ]
           }
         },
+        _feedFilter: String,
         _fixedHeader: Boolean,
         _feeds: Array,
         _article: Object

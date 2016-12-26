@@ -42,7 +42,7 @@
 
   <template>
     <div class="masonry-grid">
-      <template is="dom-repeat" items="[[feeds]]">
+      <template is="dom-repeat" items="[[feeds]]" filter="_filterResults" id="items">
         <div class="masonry-grid__item excerpt-card">
           <h2 class="excerpt-title"><a href$="/article/[[slug(item.title)]]" on-click="_setSelected">[[item.title]]</a></h2>
           <div class="excerpt-content" inner-h-t-m-l="[[item.contentSnippet]]"></div>
@@ -62,11 +62,23 @@
 
     properties: {
       feeds: Array,
-      active: Boolean
+      active: Boolean,
+      filter: {
+        type: String,
+        observer: '_filterChanged'
+      }
     },
 
     _setSelected: function(e) {
       this.fire('selected-item', e.model.item, { bubbles: false });
+    },
+
+    _filterResults: function(item) {
+      return item.title.toLowerCase().indexOf(this.filter.toLowerCase()) !== -1;
+    },
+
+    _filterChanged: function(filter) {
+      this.$.items.render();
     }
   });
   </script>
