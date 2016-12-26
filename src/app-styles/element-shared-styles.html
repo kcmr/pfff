@@ -23,3 +23,21 @@
     </style>
   </template>
 </dom-module>
+
+<dom-module id="masonry-grid-styles">
+  <template>
+    <style>
+      .masonry-grid {
+        -moz-column-width: var(--masonry-column-width);
+        column-width: var(--masonry-column-width);
+        -moz-column-gap: var(--masonry-column-gap);
+        column-gap: var(--masonry-column-gap);
+      }
+
+      .masonry-grid__item {
+        display: inline-block;
+        margin-bottom: var(--masonry-column-gap);
+      }
+    </style>
+  </template>
+</dom-module>
