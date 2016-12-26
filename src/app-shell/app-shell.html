@@ -137,7 +137,7 @@
 
     <app-drawer-layout fullbleed responsive-width="959px" on-narrow-changed="_setupLayout">
       <app-header-layout>
-        <app-header reveals fixed="[[_fixedHeader]]">
+        <app-header reveals fixed="[[_isDesktop]]">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle class="btn-menu"></paper-icon-button>
             <h1 main-title>pfff</h1>
@@ -202,7 +202,7 @@
           }
         },
         _feedFilter: String,
-        _fixedHeader: Boolean,
+        _isDesktop: Boolean,
         _feeds: Array,
         _article: Object
       },
@@ -212,7 +212,7 @@
       },
 
       _setupLayout: function(e) {
-        this._fixedHeader = !e.detail.value;
+        this._isDesktop = !e.detail.value;
       },
 
       _getFeedUrl: function(tail) {
@@ -249,7 +249,9 @@
       },
 
       _closeDrawer: function() {
-        this.$.drawer.close();
+        if (!this._isDesktop) {
+          this.$.drawer.close();
+        }
       }
 
     });
