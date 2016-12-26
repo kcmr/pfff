@@ -33,6 +33,8 @@
         };
       }
 
+      [hidden] { display: none !important; }
+
       app-toolbar {
         padding: 0 10px;
         height: var(--header-height);
@@ -115,7 +117,7 @@
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <h1 main-title>Polyfeed</h1>
-            <paper-input label="Buscar" value="{{_feedFilter}}"></paper-input>
+            <paper-input label="Buscar" value="{{_feedFilter}}" hidden="[[_isNotFeedPage(pageData.page)]]"></paper-input>
           </app-toolbar>
         </app-header>
       </app-header-layout>
@@ -210,6 +212,10 @@
         if (e.detail.entries && e.detail.entries.length) {
           this.set('_feeds', e.detail.entries);
         }
+      },
+
+      _isNotFeedPage: function(page) {
+        return page !== 'feed';
       }
 
     });
