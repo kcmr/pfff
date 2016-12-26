@@ -46,13 +46,37 @@
         box-shadow: 0 2px 3px 0 rgba(0,0,0,0.28);
       }
 
-      app-header paper-icon-button {
+      app-header .btn-menu {
         margin-right: 20px;
       }
 
       app-header [main-title] {
         font-size: 20px;
         font-weight: 500;
+      }
+
+      .filter {
+        --paper-input-container-color: rgba(255,255,255,.5);
+        --paper-input-container-focus-color: #fff;
+        --paper-input-container-input-color: #fff;
+        --paper-input-container: {
+          width: 200px;
+        };
+        --paper-input-suffix: {
+          position: absolute;
+          right: -8px;
+          top: -8px;
+        };
+        --paper-input-container-input: {
+          line-height: 26px;
+          padding-right: 32px;
+          box-sizing: border-box;
+        };
+      }
+
+      .btn-clear[disabled] {
+        color: inherit;
+        opacity: .5;
       }
 
       /* app-header inside drawer in narrow mode (not desktop) */
@@ -115,9 +139,11 @@
       <app-header-layout>
         <app-header reveals fixed="[[_fixedHeader]]">
           <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <paper-icon-button icon="menu" drawer-toggle class="btn-menu"></paper-icon-button>
             <h1 main-title>Polyfeed</h1>
-            <paper-input label="Buscar" value="{{_feedFilter}}" hidden="[[_isNotFeedPage(pageData.page)]]"></paper-input>
+            <paper-input class="filter" label="Filtrar" value="{{_feedFilter}}" hidden="[[_isNotFeedPage(pageData.page)]]" no-label-float>
+              <paper-icon-button class="btn-clear" suffix icon="clear" on-click="_clearFilter" disabled="[[!_feedFilter]]" alt="Limpiar"></paper-icon-button>
+            </paper-input>
           </app-toolbar>
         </app-header>
       </app-header-layout>
@@ -216,6 +242,10 @@
 
       _isNotFeedPage: function(page) {
         return page !== 'feed';
+      },
+
+      _clearFilter: function() {
+        this._feedFilter = '';
       }
 
     });
