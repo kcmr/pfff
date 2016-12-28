@@ -167,12 +167,8 @@
         </ul>
       </app-drawer>
 
-      <iron-pages
-        selected="[[pageData.page]]"
-        attr-for-selected="data-page"
-        fallback-selection="feed"
-        selected-attribute="active">
-        <feed-view data-page="feed" feeds="[[_feeds]]" on-selected-item="_setArticle" filter="[[_feedFilter]]"></feed-view>
+      <iron-pages selected="[[pageData.page]]" attr-for-selected="data-page" fallback-selection="feed" selected-attribute="active">
+        <feed-view data-page="feed" feed="[[_feed]]" feeds="[[_feeds]]" on-selected-item="_setArticle" filter="[[_feedFilter]]"></feed-view>
         <article-view data-page="article" article="[[_article]]" on-article-request="_getArticle"></article-view>
       </iron-pages>
     </app-drawer-layout>
@@ -201,9 +197,15 @@
             ]
           }
         },
+        pageData: Object,
+        tail: {
+          type: Object,
+          observer: '_tailChanged'
+        },
         _feedFilter: String,
         _isDesktop: Boolean,
         _feeds: Array,
+        _feed: String,
         _article: Object
       },
 
@@ -251,6 +253,12 @@
       _closeDrawer: function() {
         if (!this._isDesktop) {
           this.$.drawer.close();
+        }
+      },
+
+      _tailChanged: function(tail) {
+        if (tail.path) {
+          this._feed = tail.path.substr(1);
         }
       }
 

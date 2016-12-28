@@ -44,7 +44,7 @@
     <div class="masonry-grid">
       <template is="dom-repeat" items="[[feeds]]" filter="_filterResults" id="items">
         <div class="masonry-grid__item excerpt-card">
-          <h2 class="excerpt-title"><a href$="/article/[[slug(item.title)]]" on-click="_setSelected">[[item.title]]</a></h2>
+          <h2 class="excerpt-title"><a href$="/article/[[feed]]/[[slug(item.title)]]" on-click="_setSelected">[[item.title]]</a></h2>
           <div class="excerpt-content" inner-h-t-m-l="[[item.contentSnippet]]"></div>
         </div>
       </template>
@@ -62,6 +62,7 @@
 
     properties: {
       feeds: Array,
+      feed: String,
       active: Boolean,
       filter: {
         type: String,
