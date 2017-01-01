@@ -158,7 +158,7 @@
         <ul class="drawer-list">
           <template is="dom-repeat" items="[[sources]]">
             <li class="drawer-list__item">
-              <a class$="drawer-list__link drawer-link [[_computeActiveLink(item, tail)]]" data-feed$="[[slug(item.siteName)]]" href$="/feed/[[slug(item.siteName)]]" on-click="_closeDrawer">
+              <a class$="drawer-list__link drawer-link [[_computeActiveLink(item, _feed.slug)]]" data-feed$="[[slug(item.siteName)]]" href$="/feed/[[slug(item.siteName)]]" on-click="_closeDrawer">
                 <iron-icon icon="description" class="drawer-link__icon"></iron-icon>
                 <span class="drawer-link__label">[[item.siteName]]</span>
               </a>
@@ -235,8 +235,8 @@
         }
       },
 
-      _computeActiveLink: function(item, tail) {
-        return tail.path.substr(1) === this.slug(item.siteName) ? 'drawer-list__link--active' : '';
+      _computeActiveLink: function(item, feedSlug) {
+        return feedSlug === this.slug(item.siteName) ? 'drawer-list__link--active' : '';
       },
 
       _setupLayout: function(e) {
