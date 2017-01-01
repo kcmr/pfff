@@ -64,9 +64,23 @@
       feeds: Array,
       feed: String,
       active: Boolean,
+      selectedArticleSlug: String,
       filter: {
         type: String,
         observer: '_filterChanged'
+      }
+    },
+
+    observers: [
+      '_getArticleBySlug(feeds, selectedArticleSlug)'
+    ],
+
+    _getArticleBySlug: function(feeds, selectedArticleSlug) {
+      for (var i = 0, len = feeds.length; i < len; i++) {
+        if (this.slug(feeds[i].title) === selectedArticleSlug) {
+          this.fire('selected-item', feeds[i], { bubbles: false });
+          break;
+        }
       }
     },
 

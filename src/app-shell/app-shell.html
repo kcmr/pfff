@@ -130,8 +130,8 @@
       tail="{{tail}}">
     </app-route>
 
-    <app-data
-      feed="[[_getFeedUrl(tail)]]"
+    <app-data id="data"
+      feed="[[_feed.url]]"
       on-response="_setFeeds">
     </app-data>
 
@@ -168,8 +168,20 @@
       </app-drawer>
 
       <iron-pages selected="[[pageData.page]]" attr-for-selected="data-page" fallback-selection="feed" selected-attribute="active">
-        <feed-view data-page="feed" feed="[[_feed]]" feeds="[[_feeds]]" on-selected-item="_setArticle" filter="[[_feedFilter]]"></feed-view>
-        <article-view data-page="article" article="[[_article]]" on-article-request="_getArticle"></article-view>
+        <feed-view
+          data-page="feed"
+          feed="[[_feed.slug]]"
+          feeds="[[_feeds]]"
+          selected-article-slug="[[_selectedArticleSlug]]"
+          on-selected-item="_setArticle"
+          filter="[[_feedFilter]]">
+        </feed-view>
+
+        <article-view
+          data-page="article"
+          article="[[_article]]"
+          on-article-request="_getArticle">
+        </article-view>
       </iron-pages>
     </app-drawer-layout>
 
@@ -197,16 +209,30 @@
             ]
           }
         },
-        pageData: Object,
-        tail: {
+        route: {
           type: Object,
-          observer: '_tailChanged'
+          observer: '_routeChanged'
         },
+        pageData: Object,
+        tail: Object,
         _feedFilter: String,
         _isDesktop: Boolean,
+        _article: Object,
+        _selectedArticleSlug: String,
+
+        /**
+         * Response from <app-data>
+         */
         _feeds: Array,
-        _feed: String,
-        _article: Object
+
+        /**
+         * Feed slug
+         */
+        _feed: Object,
+        _articleRequest: {
+          type: Boolean,
+          value: false
+        }
       },
 
       _computeActiveLink: function(item, tail) {
@@ -217,11 +243,10 @@
         this._isDesktop = !e.detail.value;
       },
 
-      _getFeedUrl: function(tail) {
-        var path = tail.path.substr(1);
+      _getFeedUrl: function(feedSlug) {
         var feed;
         this.sources.forEach(function(item) {
-          if (this.slug(item.siteName) === path) {
+          if (this.slug(item.siteName) === feedSlug) {
             feed = item.feed;
           }
         }, this);
@@ -233,7 +258,7 @@
       },
 
       _getArticle: function() {
-        console.log('necesito artículo!');
+        this._selectedArticleSlug = this.slug(this.tail.path.split('/')[2]);
       },
 
       _setFeeds: function(e) {
@@ -256,10 +281,14 @@
         }
       },
 
-      _tailChanged: function(tail) {
-        if (tail.path) {
-          this._feed = tail.path.substr(1);
-        }
+      _routeChanged: function(route) {
+        var feedSlug = route.path.split('/')[2];
+        var feedUrl = this._getFeedUrl(feedSlug);
+
+        this.set('_feed', {
+          url: feedUrl,
+          slug: feedSlug
+        });
       }
 
     });
